@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import PlainTextResponse
 
 from app.api.chat import ChatRequest, enviar_mensaje
 
@@ -23,7 +24,7 @@ def home(request: Request):
     )
 
 
-@app.post("/chatbot")
+@app.post("/chatbot", response_class=PlainTextResponse)
 def chatbot(data: ChatRequest):
     respuesta = enviar_mensaje(data.prompt)
     return respuesta

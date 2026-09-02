@@ -30,4 +30,6 @@ chat = client.chats.create(
 def enviar_mensaje(mensaje: str) -> str:
     respuesta = chat.send_message(mensaje)
 
+    print(repr(respuesta.text))
+
     return respuesta.text

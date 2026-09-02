@@ -4,7 +4,6 @@ function sendMessage() {
 
     if (message.trim() === "") return;
 
-    // Display user message
     var chatBox = document.getElementById("chat-box");
     var userMessageDiv = document.createElement("div");
 
@@ -13,11 +12,9 @@ function sendMessage() {
 
     chatBox.appendChild(userMessageDiv);
 
-    // Clear input
     userInput.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Send message to chatbot backend
     fetch("/chatbot", {
         method: "POST",
         headers: {
@@ -27,12 +24,18 @@ function sendMessage() {
             prompt: message
         }),
     })
-    .then((response) => response.text())
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Error HTTP: " + response.status);
+        }
+
+        return response.text();
+    })
     .then((data) => {
     var botMessageDiv = document.createElement("div");
 
     botMessageDiv.className = "message bot-message";
-    botMessageDiv.textContent = data;
+    botMessageDiv.innerHTML = marked.parse(data);
 
     chatBox.appendChild(botMessageDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
