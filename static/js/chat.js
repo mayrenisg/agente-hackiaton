@@ -1,11 +1,21 @@
 var fileInput = document.getElementById("policy-file");
+
 var fileName = document.getElementById("file-name");
+
 var deleteFileButton = document.getElementById("delete-file-button");
 
 var userInput = document.getElementById("user-input");
+
 var sendButton = document.getElementById("send-button");
 
 var chatBox = document.getElementById("chat-box");
+
+
+// =====================================================
+// ARCHIVO SELECCIONADO
+// =====================================================
+
+var selectedFileName = null;
 
 
 // =====================================================
@@ -30,10 +40,13 @@ fileInput.addEventListener("change", function () {
         fileName.textContent = "";
 
         deleteFileButton.style.display = "none";
+        selectedFileName = null;
 
         return;
     }
 
+    // Guardar nombre del archivo
+    selectedFileName = file.name;
 
     // Mostrar nombre
     fileName.textContent = file.name;
@@ -56,7 +69,6 @@ function uploadPolicy() {
     if (fileInput.files.length === 0) {
         return;
     }
-
 
     var file = fileInput.files[0];
 
@@ -128,6 +140,7 @@ function uploadPolicy() {
         fileName.textContent = "";
 
         deleteFileButton.style.display = "none";
+        selectedFileName = null;
 
         fileInput.disabled = false;
 
@@ -176,7 +189,8 @@ deleteFileButton.addEventListener(
             fileName.textContent = "";
 
             deleteFileButton.style.display = "none";
-
+            
+            selectedFileName = null;
 
             addBotMessage(
                 "La póliza fue eliminada. Puedes subir una nueva cuando quieras."
@@ -235,24 +249,63 @@ function sendMessage() {
     }
 
 
+    // =================================================
+    // CREAR MENSAJE VISUAL
+    // =================================================
+
+    var displayMessage = message;
+
+
+    if (selectedFileName !== null) {
+
+        displayMessage =
+            "📎 " +
+            selectedFileName +
+            "\n" +
+            message;
+    }
+
+
     // Mostrar mensaje del usuario
     addUserMessage(
-        message
+        displayMessage
     );
 
 
-    // Limpiar input
+    // =================================================
+    // LIMPIAR INPUT
+    // =================================================
+
     userInput.value = "";
 
     toggleSendButton();
 
 
-    // Scroll
+    // =================================================
+    // LIMPIAR ADJUNTO DE LA INTERFAZ
+    // =================================================
+
+    fileInput.value = "";
+
+    fileName.textContent = "";
+
+    deleteFileButton.style.display = "none";
+
+    selectedFileName = null;
+
+
+    // =================================================
+    // SCROLL
+    // =================================================
+
     chatBox.scrollTop =
         chatBox.scrollHeight;
 
 
-    // Enviar al backend
+    // =================================================
+    // ENVIAR AL BACKEND
+    // =================================================
+
     fetch(
         "/chatbot",
         {
@@ -350,9 +403,16 @@ function addBotMessage(
     botMessageDiv.className =
         "message bot-message";
 
-    message = message.replace(/"/g, "");
-    message = message.replace(/\\n/g, "\n");
-    message = message.replace(/\\\*/g, "*");
+
+    message =
+        message.replace(/"/g, "");
+
+    message =
+        message.replace(/\\n/g, "\n");
+
+    message =
+        message.replace(/\\\*/g, "*");
+
 
     botMessageDiv.innerHTML =
         marked.parse(message);
