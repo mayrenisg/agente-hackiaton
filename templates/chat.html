@@ -1,32 +1,129 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Chatbot</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-  </head>
 
-  <body>
+<head>
+
+    <title>Asistente de Seguros</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
     <div class="chat-container">
-      <div class="chat-header">Simple AI Chatbot</div>
 
-      <div class="chat-box" id="chat-box">
-        <div class="message bot-message">
-          Hola, soy tu asistente de seguros médicos. Puedo ayudarte a consultar información sobre tu póliza, coberturas, beneficios, deducibles, copagos y exclusiones. ¿En qué puedo ayudarte?
+
+        <div class="chat-header">
+
+            Asistente de Seguros Médicos
+
         </div>
-      </div>
 
-      <div class="chat-input">
-        <input
-          type="text"
-          id="user-input"
-          placeholder="Escribe tu mensaje..."
-        />
 
-        <button onclick="sendMessage()">Enviar</button>
-      </div>
+        <div
+            class="chat-box"
+            id="chat-box"
+        >
+
+            <div class="message bot-message">
+
+                Hola, soy tu asistente de seguros médicos.
+                Puedo ayudarte a consultar información sobre tu póliza,
+                coberturas, beneficios, deducibles, copagos y exclusiones.
+                ¿En qué puedo ayudarte?
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+
+            <!-- SUBIR PÓLIZA -->
+
+            <div class="file-upload">
+
+                <input
+                    type="file"
+                    id="policy-file"
+                    accept=".pdf"
+                >
+
+
+                <label
+                    for="policy-file"
+                    class="upload-button"
+                >
+
+                    📎 Subir póliza
+
+                </label>
+
+
+                <span id="file-name"></span>
+
+
+                <button
+                    type="button"
+                    id="delete-file-button"
+                    class="delete-button"
+                    style="display: none;"
+                >
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- INPUT DEL CHAT -->
+
+            <div class="message-input">
+
+                <input
+                    type="text"
+                    id="user-input"
+                    placeholder="Escribe tu mensaje..."
+                >
+
+
+                <button
+                    id="send-button"
+                    disabled
+                >
+
+                    Enviar
+
+                </button>
+
+            </div>
+
+
+        </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/static/js/chat.js"></script>
-  </body>
+
+    <!-- Markdown -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+    ></script>
+
+
+    <!-- JavaScript -->
+
+    <script
+        src="/static/js/chat.js"
+    ></script>
+
+</body>
+
 </html>

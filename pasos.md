@@ -10,7 +10,7 @@
 9. Agrego el html, css y js para la interfaz de chat
 10. Configuro main.py y chat.py para poder interactuar con el chatbot desde la interfaz
 11. Para levantar la app: uvicorn app.main:app --reload
-
+12. Le agrego que se puedan subir documentos, instalando pip install python-multipart
 
 
 Plant UML del sistema

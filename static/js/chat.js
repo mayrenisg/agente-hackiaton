@@ -1,46 +1,368 @@
-function sendMessage() {
-    var userInput = document.getElementById("user-input");
-    var message = userInput.value;
+var fileInput = document.getElementById("policy-file");
+var fileName = document.getElementById("file-name");
+var deleteFileButton = document.getElementById("delete-file-button");
 
-    if (message.trim() === "") return;
+var userInput = document.getElementById("user-input");
+var sendButton = document.getElementById("send-button");
 
-    var chatBox = document.getElementById("chat-box");
-    var userMessageDiv = document.createElement("div");
+var chatBox = document.getElementById("chat-box");
 
-    userMessageDiv.className = "message user-message";
-    userMessageDiv.textContent = message;
 
-    chatBox.appendChild(userMessageDiv);
+// =====================================================
+// SELECCIONAR ARCHIVO
+// =====================================================
 
-    userInput.value = "";
-    chatBox.scrollTop = chatBox.scrollHeight;
+fileInput.addEventListener("change", function () {
 
-    fetch("/chatbot", {
+    if (fileInput.files.length === 0) {
+        return;
+    }
+
+    var file = fileInput.files[0];
+
+
+    // Validar PDF
+    if (file.type !== "application/pdf") {
+
+        alert("Solo puedes seleccionar archivos PDF.");
+
+        fileInput.value = "";
+        fileName.textContent = "";
+
+        deleteFileButton.style.display = "none";
+
+        return;
+    }
+
+
+    // Mostrar nombre
+    fileName.textContent = file.name;
+
+    // Mostrar botón eliminar
+    deleteFileButton.style.display = "inline-block";
+
+
+    // Subir automáticamente
+    uploadPolicy();
+});
+
+
+// =====================================================
+// SUBIR PÓLIZA
+// =====================================================
+
+function uploadPolicy() {
+
+    if (fileInput.files.length === 0) {
+        return;
+    }
+
+
+    var file = fileInput.files[0];
+
+    var formData = new FormData();
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    // Desactivar controles mientras se procesa
+    fileInput.disabled = true;
+    sendButton.disabled = true;
+
+
+    fetch("/upload-policy", {
+
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            prompt: message
-        }),
+
+        body: formData
+
     })
-    .then((response) => {
+
+    .then(function (response) {
+
         if (!response.ok) {
-            throw new Error("Error HTTP: " + response.status);
+
+            throw new Error(
+                "Error HTTP: " + response.status
+            );
         }
+
+        return response.json();
+    })
+
+    .then(function (data) {
+
+        console.log(
+            "Póliza subida:",
+            data
+        );
+
+
+        addBotMessage(
+            "Tu póliza fue cargada correctamente. Ya puedes hacer preguntas sobre su contenido."
+        );
+
+
+        fileInput.disabled = false;
+
+        toggleSendButton();
+    })
+
+    .catch(function (error) {
+
+        console.error(
+            "Error:",
+            error
+        );
+
+
+        alert(
+            "No se pudo procesar la póliza."
+        );
+
+
+        fileInput.value = "";
+        fileName.textContent = "";
+
+        deleteFileButton.style.display = "none";
+
+        fileInput.disabled = false;
+
+        toggleSendButton();
+    });
+}
+
+
+// =====================================================
+// ELIMINAR PÓLIZA
+// =====================================================
+
+deleteFileButton.addEventListener(
+    "click",
+    function () {
+
+        fetch(
+            "/delete-policy",
+            {
+                method: "DELETE"
+            }
+        )
+
+        .then(function (response) {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Error HTTP: " + response.status
+                );
+            }
+
+            return response.json();
+        })
+
+        .then(function (data) {
+
+            console.log(
+                "Póliza eliminada:",
+                data
+            );
+
+
+            fileInput.value = "";
+
+            fileName.textContent = "";
+
+            deleteFileButton.style.display = "none";
+
+
+            addBotMessage(
+                "La póliza fue eliminada. Puedes subir una nueva cuando quieras."
+            );
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Error:",
+                error
+            );
+
+            alert(
+                "No se pudo eliminar la póliza."
+            );
+        });
+    }
+);
+
+
+// =====================================================
+// ACTIVAR / DESACTIVAR BOTÓN ENVIAR
+// =====================================================
+
+userInput.addEventListener(
+    "input",
+    toggleSendButton
+);
+
+
+function toggleSendButton() {
+
+    sendButton.disabled =
+        userInput.value.trim() === "";
+}
+
+
+// =====================================================
+// BOTÓN ENVIAR
+// =====================================================
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+function sendMessage() {
+
+    var message = userInput.value.trim();
+
+
+    if (message === "") {
+        return;
+    }
+
+
+    // Mostrar mensaje del usuario
+    addUserMessage(
+        message
+    );
+
+
+    // Limpiar input
+    userInput.value = "";
+
+    toggleSendButton();
+
+
+    // Scroll
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+
+    // Enviar al backend
+    fetch(
+        "/chatbot",
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                prompt: message
+            })
+        }
+    )
+
+    .then(function (response) {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Error HTTP: " +
+                response.status
+            );
+        }
+
 
         return response.text();
     })
-    .then((data) => {
-    var botMessageDiv = document.createElement("div");
 
-    botMessageDiv.className = "message bot-message";
-    botMessageDiv.innerHTML = marked.parse(data);
+    .then(function (data) {
 
-    chatBox.appendChild(botMessageDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+        addBotMessage(
+            data
+        );
     })
-    .catch((error) => {
-        console.error("Error:", error);
+
+    .catch(function (error) {
+
+        console.error(
+            "Error:",
+            error
+        );
+
+
+        addBotMessage(
+            "Ocurrió un error al procesar tu pregunta."
+        );
     });
+}
+
+
+// =====================================================
+// MENSAJE DEL USUARIO
+// =====================================================
+
+function addUserMessage(
+    message
+) {
+
+    var userMessageDiv =
+        document.createElement("div");
+
+
+    userMessageDiv.className =
+        "message user-message";
+
+
+    userMessageDiv.textContent =
+        message;
+
+
+    chatBox.appendChild(
+        userMessageDiv
+    );
+
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+}
+
+
+// =====================================================
+// MENSAJE DEL BOT
+// =====================================================
+
+function addBotMessage(
+    message
+) {
+
+    var botMessageDiv =
+        document.createElement("div");
+
+
+    botMessageDiv.className =
+        "message bot-message";
+
+    message = message.replace(/"/g, "");
+    message = message.replace(/\\n/g, "\n");
+    message = message.replace(/\\\*/g, "*");
+
+    botMessageDiv.innerHTML =
+        marked.parse(message);
+
+
+    chatBox.appendChild(
+        botMessageDiv
+    );
+
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 }
