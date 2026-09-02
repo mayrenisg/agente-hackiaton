@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">Simple AI Chatbot</div>
+
+      <div class="chat-box" id="chat-box">
+        <div class="message bot-message">
+          Hola, soy tu asistente de seguros médicos. Puedo ayudarte a consultar información sobre tu póliza, coberturas, beneficios, deducibles, copagos y exclusiones. ¿En qué puedo ayudarte?
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Escribe tu mensaje..."
+        />
+
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+
+    <script src="/static/js/chat.js"></script>
+  </body>
+</html>
