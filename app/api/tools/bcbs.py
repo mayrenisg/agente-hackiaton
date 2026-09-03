@@ -7,6 +7,9 @@ load_dotenv()
 BCBS_PROVIDER_API = os.getenv("BCBS_PROVIDER_API")
 
 
+## para probar funciones
+##python -c "from app.tools.bcbs import obtener_proveedores_bcbs; print(obtener_proveedores_bcbs('Panamá'))"
+
 def obtener_proveedores_bcbs():
     params = {
         "handler": "Buscar",
@@ -67,3 +70,19 @@ def filtrar_proveedores(
         ]
 
     return resultados
+
+def buscar_proveedores_bcbs(
+    provincia=None,
+    especialidad=None,
+    nombre=None,
+    tipo=None
+):
+    proveedores = obtener_proveedores_bcbs()
+
+    return filtrar_proveedores(
+        proveedores,
+        provincia=provincia,
+        especialidad=especialidad,
+        nombre=nombre,
+        tipo=tipo
+    )
