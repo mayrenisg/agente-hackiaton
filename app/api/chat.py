@@ -873,13 +873,9 @@ def enviar_mensaje(mensaje: str) -> str:
     while True:
 
         function_calls = [
-
             step
-
-            for step in interaction.steps
-
+            for step in (interaction.steps or [])
             if step.type == "function_call"
-
         ]
 
 

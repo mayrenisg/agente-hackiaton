@@ -238,19 +238,23 @@ sendButton.addEventListener(
     sendMessage
 );
 
+
 function sendMessage() {
 
     var message = userInput.value.trim();
 
+
     if (message === "") {
         return;
     }
+
 
     // =================================================
     // CREAR MENSAJE VISUAL
     // =================================================
 
     var displayMessage = message;
+
 
     if (selectedFileName !== null) {
 
@@ -261,10 +265,12 @@ function sendMessage() {
             message;
     }
 
+
     // Mostrar mensaje del usuario
     addUserMessage(
         displayMessage
     );
+
 
     // =================================================
     // LIMPIAR INPUT
@@ -274,6 +280,7 @@ function sendMessage() {
 
     toggleSendButton();
 
+
     // =================================================
     // LIMPIAR ADJUNTO DE LA INTERFAZ
     // =================================================
@@ -282,19 +289,10 @@ function sendMessage() {
 
     fileName.textContent = "";
 
-    deleteFileButton.style.display =
-        "none";
+    deleteFileButton.style.display = "none";
 
     selectedFileName = null;
 
-    // =================================================
-    // MOSTRAR PROCESANDO
-    // =================================================
-
-    var processingMessage =
-        addBotMessage(
-            "⏳ Preparando respuesta..."
-        );
 
     // =================================================
     // SCROLL
@@ -302,6 +300,7 @@ function sendMessage() {
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
+
 
     // =================================================
     // ENVIAR AL BACKEND
@@ -333,15 +332,12 @@ function sendMessage() {
             );
         }
 
+
         return response.text();
     })
 
     .then(function (data) {
 
-        // Quitar "Preparando respuesta..."
-        processingMessage.remove();
-
-        // Mostrar respuesta real
         addBotMessage(
             data
         );
@@ -354,28 +350,56 @@ function sendMessage() {
             error
         );
 
-        // Quitar "Preparando respuesta..."
-        processingMessage.remove();
 
-        // Mostrar error
         addBotMessage(
             "Ocurrió un error al procesar tu pregunta."
         );
     });
 }
 
+
 // =====================================================
 // MENSAJE DEL USUARIO
 // =====================================================
 
-function addBotMessage(message) {
+function addUserMessage(
+    message
+) {
 
+    var userMessageDiv =
+        document.createElement("div");
+
+
+    userMessageDiv.className =
+        "message user-message";
+
+
+    userMessageDiv.textContent =
+        message;
+
+
+    chatBox.appendChild(
+        userMessageDiv
+    );
+
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+}
+
+
+// =====================================================
+// MENSAJE DEL BOT
+// =====================================================
+
+function addBotMessage(message) {
     var botMessageDiv =
         document.createElement("div");
 
     botMessageDiv.className =
         "message bot-message";
 
+     // Quitar comillas externas si existen
     if (
         message.startsWith('"') &&
         message.endsWith('"')
@@ -387,9 +411,11 @@ function addBotMessage(message) {
             );
     }
 
+    // Convertir saltos de línea escapados
     message =
         message.replace(/\\n/g, "\n");
 
+    // Convertir asteriscos escapados
     message =
         message.replace(/\\\*/g, "*");
 
@@ -402,6 +428,4 @@ function addBotMessage(message) {
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
-
-    return botMessageDiv;
 }
