@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
 
-    <title>Asistente de Seguros</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Asistente de Seguros Médicos</title>
 
     <link
         rel="stylesheet"
@@ -15,98 +22,374 @@
 
 <body>
 
-    <div class="chat-container">
+    <div class="app-container">
 
 
-        <div class="chat-header">
+        <!-- ==========================================
+             HEADER
+        =========================================== -->
 
-            Asistente de Seguros Médicos
+        <header class="app-header">
 
-        </div>
+            <div class="brand">
 
+                <div class="brand-icon">
+                    🛡️
+                </div>
 
-        <div
-            class="chat-box"
-            id="chat-box"
-        >
+                <div>
 
-            <div class="message bot-message">
+                    <h1>
+                        Asistente de Seguros
+                    </h1>
 
-                Hola, soy tu asistente de seguros médicos.
-                Puedo ayudarte a consultar información sobre tu póliza,
-                coberturas, beneficios, deducibles, copagos y exclusiones.
-                ¿En qué puedo ayudarte?
+                    <span class="subtitle">
+                        Asistencia inteligente para tu póliza
+                    </span>
 
-            </div>
-
-        </div>
-
-
-        <div class="chat-input">
-
-
-            <!-- SUBIR PÓLIZA -->
-
-            <div class="file-upload">
-
-                <input
-                    type="file"
-                    id="policy-file"
-                    accept=".pdf"
-                >
-
-
-                <label
-                    for="policy-file"
-                    class="upload-button"
-                >
-
-                    📎 Subir póliza
-
-                </label>
-
-
-                <span id="file-name"></span>
-
-
-                <button
-                    type="button"
-                    id="delete-file-button"
-                    class="delete-button"
-                    style="display: none;"
-                >
-
-                    ✕
-
-                </button>
+                </div>
 
             </div>
 
 
-            <!-- INPUT DEL CHAT -->
+            <div class="ai-badge">
 
-            <div class="message-input">
+                <span class="status-dot"></span>
 
-                <input
-                    type="text"
-                    id="user-input"
-                    placeholder="Escribe tu mensaje..."
-                >
-
-
-                <button
-                    id="send-button"
-                    disabled
-                >
-
-                    Enviar
-
-                </button>
+                Powered by Gemini Flash
 
             </div>
 
+        </header>
 
-        </div>
+
+        <!-- ==========================================
+             CONTENIDO PRINCIPAL
+        =========================================== -->
+
+        <main class="main-content">
+
+
+            <!-- ======================================
+                 PANEL INFORMATIVO
+            ======================================= -->
+
+            <section class="welcome-card">
+
+                <div class="welcome-content">
+
+                    <h2>
+                        Tu seguro, más fácil de entender.
+                    </h2>
+
+                    <p>
+                        Sube tu póliza y pregúntame sobre
+                        coberturas, beneficios, deducibles,
+                        copagos, exclusiones y proveedores
+                        disponibles.
+                    </p>
+
+
+                    <div class="features">
+
+                        <div class="feature">
+
+                            <span>📄</span>
+
+                            <div>
+
+                                <strong>
+                                    Analiza tu póliza
+                                </strong>
+
+                                <small>
+                                    Comprende la información
+                                    de tu documento.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <span>🏥</span>
+
+                            <div>
+
+                                <strong>
+                                    Consulta proveedores
+                                </strong>
+
+                                <small>
+                                    Encuentra opciones según
+                                    tu aseguradora.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <span>🤖</span>
+
+                            <div>
+
+                                <strong>
+                                    Inteligencia artificial
+                                </strong>
+
+                                <small>
+                                    Utilizamos modelos Gemini
+                                    Flash para responder.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     VIDEO
+                =================================== -->
+
+                <div class="video-container">
+
+                    <div class="video-placeholder">
+
+                        <span class="video-icon">
+                            ▶
+                        </span>
+
+                        <strong>
+                            Demostración
+                        </strong>
+
+                        <small>
+                            Aquí puedes colocar el video
+                            de presentación del proyecto.
+                        </small>
+
+                    </div>
+
+                    <!--
+                    Cuando tengas el video puedes reemplazar
+                    el contenido anterior por:
+
+                    <video controls>
+                        <source
+                            src="/static/video/demo.mp4"
+                            type="video/mp4"
+                        >
+                    </video>
+                    -->
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 CHAT
+            =========================================== -->
+
+            <section class="chat-container">
+
+
+                <!-- HEADER DEL CHAT -->
+
+                <div class="chat-header">
+
+                    <div>
+
+                        <strong>
+                            Asistente virtual
+                        </strong>
+
+                        <span>
+                            Disponible para ayudarte
+                        </span>
+
+                    </div>
+
+                    <div class="online-indicator">
+
+                        <span></span>
+
+                        En línea
+
+                    </div>
+
+                </div>
+
+
+                <!-- ======================================
+                     MENSAJES
+                ======================================= -->
+
+                <div
+                    class="chat-box"
+                    id="chat-box"
+                >
+
+                    <div class="message bot-message">
+
+                        <div class="message-content">
+
+                            Hola 👋
+
+                            <br><br>
+
+                            Soy tu asistente de seguros médicos.
+                            Puedes subir tu póliza y preguntarme
+                            sobre sus coberturas, beneficios,
+                            deducibles, copagos, exclusiones
+                            y proveedores.
+
+                            <br><br>
+
+                            ¿En qué puedo ayudarte?
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ======================================
+                     AVISO DE PROCESAMIENTO
+                ======================================= -->
+
+                <div class="processing-info">
+
+                    ⏱️
+
+                    <span>
+                        Las respuestas pueden tardar unos segundos
+                        mientras analizamos tu póliza y consultamos
+                        la información disponible.
+                    </span>
+
+                </div>
+
+
+                <!-- ======================================
+                     INPUT
+                ======================================= -->
+
+                <div class="chat-input">
+
+
+                    <!-- SUBIR PÓLIZA -->
+
+                    <div class="file-upload">
+
+                        <input
+                            type="file"
+                            id="policy-file"
+                            accept=".pdf"
+                        >
+
+
+                        <label
+                            for="policy-file"
+                            class="upload-button"
+                        >
+
+                            <span>
+                                📎
+                            </span>
+
+                            Subir póliza
+
+                        </label>
+
+
+                        <div
+                            id="file-name"
+                            class="file-name"
+                        ></div>
+
+
+                        <button
+                            type="button"
+                            id="delete-file-button"
+                            class="delete-button"
+                            style="display: none;"
+                            title="Eliminar póliza"
+                        >
+
+                            ✕
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- INPUT DEL CHAT -->
+
+                    <div class="message-input">
+
+                        <input
+                            type="text"
+                            id="user-input"
+                            placeholder="Escribe tu pregunta..."
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            id="send-button"
+                            disabled
+                        >
+
+                            <span>
+                                Enviar
+                            </span>
+
+                            <span>
+                                ➤
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 FOOTER
+            =========================================== -->
+
+            <footer class="app-footer">
+
+                <span>
+                    Asistente de Seguros Médicos
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    Powered by Gemini Flash
+                </span>
+
+            </footer>
+
+
+        </main>
 
     </div>
 
@@ -123,6 +406,7 @@
     <script
         src="/static/js/chat.js"
     ></script>
+
 
 </body>
 
