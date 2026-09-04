@@ -7,15 +7,123 @@ load_dotenv()
 BCBS_PROVIDER_API = os.getenv("BCBS_PROVIDER_API")
 
 
-## para probar funciones
-##python -c "from app.tools.bcbs import obtener_proveedores_bcbs; print(obtener_proveedores_bcbs('Panamá'))"
+PROVINCIAS_BCBS = {
+    "AGUADULCE": 300,
+    "CHIRIQUI": 302,
+    "CHITRE": 303,
+    "COCLE": 304,
+    "COLON": 305,
+    "HERRERA": 306,
+    "LA CHORRERA": 307,
+    "LOS SANTOS": 308,
+    "PANAMA": 309,
+    "VERAGUAS": 311,
+}
 
-def obtener_proveedores_bcbs():
+
+ESPECIALIDADES_BCBS = {
+    "ALERGIA": 1600,
+    "ANESTESIOLOGIA": 1602,
+    "ANESTESIOLOGIA- MEDICINA DEL DOLOR": 1702,
+    "CARDIOLOGIA": 1604,
+    "CARDIOVASCULAR": 1605,
+    "CIRUGÍA": 1688,
+    "CIRUGÍA_CIRUGIA CARDIOVASCULAR Y TORACICA": 1707,
+    "CIRUGÍA_CIRUGIA HEPATO- PANCREATICO- BILIAR": 1708,
+    "CIRUGÍA_CIRUGIA MAXILO FACIAL": 1709,
+    "CIRUGÍA_CIRUGIA PLASTICA": 1710,
+    "CIRUGÍA_LAPAROSCOPIA-COLOPROCTOLOGIA": 1711,
+    "DERMATOLOGIA": 1625,
+    "FISIOTERAPIA": 1628,
+    "GASTROENTEROLOGIA": 1629,
+    "GERIATRIA": 1631,
+    "GINECOLOGIA Y OBSTETRICIA": 1632,
+    "GINECOLOGIA Y OBSTETRICIA_GENETICA": 1727,
+    "GINECOLOGIA Y OBSTETRICIA_MAMAS-ONCOLOGIA": 1728,
+    "GINECOLOGIA Y OBSTETRICIA_ONCOLOGIA": 1729,
+    "GINECOLOGIA Y OBSTETRICIA_ONCOLOGIA-MAMAS": 1730,
+    "GINECOLOGIA Y OBSTETRICIA_UROGINECOLOGIA": 1731,
+    "HEMATOLOGIA": 1633,
+    "HOSPITAL": 1700,
+    "INFECTOLOGIA": 1635,
+    "MEDICINA CRITICA": 1642,
+    "MEDICINA FAMILIAR": 1643,
+    "MEDICINA FISICA Y REHABILITACION": 1644,
+    "MEDICINA FISICA Y REHABILITACION_NEUROFISIOLOGIA": 1733,
+    "MEDICINA GENERAL": 1645,
+    "MEDICINA INTERNA": 1646,
+    "MEDICINA INTERNA_CARDIOLOGIA": 1734,
+    "MEDICINA INTERNA_GASTROENTEROLOGIA": 1736,
+    "MEDICINA INTERNA_GERIATRIA": 1738,
+    "MEDICINA INTERNA_HEMATOLOGIA": 1739,
+    "MEDICINA INTERNA_ONCOLOGIA": 1740,
+    "MEDICINA INVASIVA": 1647,
+    "MEDICINA INVASIVA_RADIOLOGIA": 1741,
+    "MEDICINA NUCLEAR": 1648,
+    "NEFROLOGIA": 1650,
+    "NEUMOLOGIA": 1652,
+    "NEUROCIRUGIA": 1653,
+    "NEUROFISIOLOGIA": 1654,
+    "NEUROLOGIA": 1655,
+    "NEUROLOGIA_NEUROFISIOLOGIA": 1699,
+    "OFTALMOLOGIA": 1656,
+    "OFTALMOLOGIA_CORNEA-EXCIMER LASER-CATARA": 1742,
+    "OFTALMOLOGIA_GLAUCOMA": 1744,
+    "OFTALMOLOGIA_RETINOLOGIA": 1745,
+    "ONCOLOGIA": 1657,
+    "ONGCOLOGIA_HEMATOLOGIA": 1718,
+    "ORTOPEDIA Y TRAUMATOLOGIA": 1659,
+    "ORTOPEDIA Y TRAUMATOLOGIA - CADERA": 1720,
+    "ORTOPEDIA Y TRAUMATOLOGIA_ARTROSCOPIA": 1746,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA ARTICULAR": 1747,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA DE COLUMNA": 1748,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA DE HOMBRO": 1749,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA DE MANO": 1750,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA DE PIE Y TOBILLO": 1751,
+    "ORTOPEDIA Y TRAUMATOLOGIA_CIRUGIA DE TRAUMA DE PELVIS": 1752,
+    "ORTOPEDIA Y TRAUMATOLOGIA_MICROCIRUGIA DE MANO": 1753,
+    "OTORRINOLARINGOLOGIA": 1661,
+    "OTORRINOLARINGOLOGIA_CIRUGIA DE CABEZA Y CUELLO": 1754,
+    "OTORRINOLARINGOLOGIA_OTOLOGIA Y OTONEUROLOGIA": 1755,
+    "PEDIATRIA": 1662,
+    "PEDIATRIA_CIRUGIA GENERAL": 1703,
+    "PROCEDIMIENTOS AMBULATORIOS": 1693,
+    "PROCTOLOGIA": 1663,
+    "PSICOLOGIA": 1724,
+    "RADIOLOGIA": 1666,
+    "RADIO-ONCOLOGIA": 1698,
+    "RADIOTERAPIA": 1667,
+    "TERAPIA INTENSIVA": 1672,
+    "UROGINECOLOGIA": 1676,
+    "UROLOGIA": 1677,
+    "UROLOGIA_ANDROLOGIA": 1756,
+    "UROLOGIA_ONCOLOGIA": 1758,
+    "TODAS LAS ESPECIALIDADES": 0,
+    "*": 1704
+}
+
+
+TIPOS_BCBS = {
+    "CENTRO": 200,
+    "CLINICA": 201,
+    "CLINICA SATELITE": 202,
+    "HOSPITAL": 203,
+    "LABORATORIO": 204,
+    "MEDICO": 205,
+    "TODOS LOS TIPOS DE SERVICIOS": "",
+}
+
+
+def obtener_proveedores_bcbs(
+    area_id=0,
+    tipo_id="",
+    especialidad_id=0
+):
     params = {
         "handler": "Buscar",
-        "areaId": 0,
-        "tipoId": "",
-        "especialidadId": 0,
+        "areaId": area_id,
+        "tipoId": tipo_id,
+        "especialidadId": especialidad_id,
         "subEspecialidadId": 0,
         "ubicacionId": "",
         "proveedor": ""
@@ -32,57 +140,35 @@ def obtener_proveedores_bcbs():
     return response.json()
 
 
-def filtrar_proveedores(
-    proveedores,
-    provincia=None,
-    especialidad=None,
-    nombre=None,
-    tipo=None
-):
-    resultados = proveedores
-
-    if provincia:
-        provincia = provincia.upper()
-        resultados = [
-            p for p in resultados
-            if provincia in p.get("area", "").upper()
-        ]
-
-    if especialidad:
-        especialidad = especialidad.upper()
-        resultados = [
-            p for p in resultados
-            if especialidad in p.get("especialidad", "").upper()
-        ]
-
-    if nombre:
-        nombre = nombre.upper()
-        resultados = [
-            p for p in resultados
-            if nombre in p.get("proveedor", "").upper()
-        ]
-
-    if tipo:
-        tipo = tipo.upper()
-        resultados = [
-            p for p in resultados
-            if tipo in p.get("tipo", "").upper()
-        ]
-
-    return resultados
-
 def buscar_proveedores_bcbs(
     provincia=None,
     especialidad=None,
-    nombre=None,
     tipo=None
 ):
-    proveedores = obtener_proveedores_bcbs()
+    area_id = 0
+    especialidad_id = 0
+    tipo_id = ""
 
-    return filtrar_proveedores(
-        proveedores,
-        provincia=provincia,
-        especialidad=especialidad,
-        nombre=nombre,
-        tipo=tipo
+    if provincia:
+        provincia = provincia.upper()
+        area_id = PROVINCIAS_BCBS.get(provincia, 0)
+
+    if especialidad:
+        especialidad = especialidad.upper()
+        especialidad_id = ESPECIALIDADES_BCBS.get(
+            especialidad,
+            0
+        )
+
+    if tipo:
+        tipo = tipo.upper()
+        tipo_id = TIPOS_BCBS.get(
+            tipo,
+            ""
+        )
+
+    return obtener_proveedores_bcbs(
+        area_id=area_id,
+        tipo_id=tipo_id,
+        especialidad_id=especialidad_id
     )

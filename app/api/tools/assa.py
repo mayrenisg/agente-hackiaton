@@ -9,7 +9,7 @@ ASSA_PROVIDER_API = os.getenv("ASSA_PROVIDER_API")
 ## para probar funciones
 ##python -c "from app.tools.assa import obtener_proveedores_assa; print(obtener_proveedores_assa())"
 
-def obtener_proveedores_assa():
+def buscar_proveedores_assa():
     params = {
         "provincia": "0",
         "hospital": "00",

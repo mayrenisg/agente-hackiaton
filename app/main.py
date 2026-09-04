@@ -57,42 +57,29 @@ async def upload_policy(
     file: UploadFile = File(...)
 ):
 
-    # Validar que sea PDF
     if file.content_type != "application/pdf":
         raise HTTPException(
             status_code=400,
             detail="Solo se permiten archivos PDF."
         )
 
-
-    # Nombre del archivo
     file_path = UPLOAD_DIR / file.filename
 
-
-    # Guardar PDF localmente
     with open(file_path, "wb") as buffer:
         buffer.write(
             await file.read()
         )
 
-
     try:
 
-        # Eliminar póliza anterior
-        eliminar_poliza()
-
-
-        # Subir nueva póliza a Gemini
-        uploaded_file = subir_poliza(
+        subir_poliza(
             str(file_path)
         )
-
 
         return {
             "message": "Póliza subida correctamente.",
             "filename": file.filename
         }
-
 
     except Exception as error:
 
@@ -104,7 +91,6 @@ async def upload_policy(
             status_code=500,
             detail="No se pudo procesar la póliza."
         )
-
 
 @app.delete("/delete-policy")
 def delete_policy():

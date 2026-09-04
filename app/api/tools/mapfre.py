@@ -38,7 +38,7 @@ def _generar_credenciales():
   return tik_base64, tok_base64
 
 
-def obtener_proveedores_mapfre(nombre=""):
+def buscar_proveedores_mapfre(nombre=""):
   if not MAPFRE_PROVIDER_API:
     print("Error: La variable de entorno MAPFRE_PROVIDER_API no está definida.")
     return None
